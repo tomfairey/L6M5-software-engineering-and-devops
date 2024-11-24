@@ -21,3 +21,7 @@ L6M5-software-engineering-and-devops
      ├─── namespace
      ├─── service
      └─── volume
+
+## Requirements
+
+https://github.com/Schniz/fnm
