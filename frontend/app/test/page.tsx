@@ -27,6 +27,7 @@ export default function Test() {
           <li className="mb-2">
             <Link href="/" className="underline">Go back</Link> (&lt;--)
           </li>
+          <a href="/">a[href] to /</a>
         </ul>
       </main>
     </div>
