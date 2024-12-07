@@ -14,6 +14,8 @@ import { ellipse, square, triangle, cogOutline, settingsSharp, barcodeSharp, lis
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
+import Scan from './pages/Scan';
+import Settings from './pages/Settings';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -56,10 +58,12 @@ const App: React.FC = () => (
             <Tab1 />
           </Route>
           <Route exact path="/scan">
-            <Tab2 />
+            {/* <Tab2 /> */}
+            <Scan />
           </Route>
           <Route path="/settings">
-            <Tab3 />
+            {/* <Tab3 /> */}
+            <Settings />
           </Route>
           <Route path="/login">
             <>
