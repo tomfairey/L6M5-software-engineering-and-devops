@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from '@ionic/react';
 import './Scan.scss';
 import { useLocation } from 'react-router';
-import { IDetectedBarcode, outline, Scanner } from '@yudiel/react-qr-scanner';
+import { type IDetectedBarcode, outline, Scanner } from '@yudiel/react-qr-scanner';
+
+import { ErrorBoundary } from "react-error-boundary";
 
 import { pause, play } from 'ionicons/icons';
 
@@ -10,7 +12,7 @@ const Scan: React.FC = () => {
 
 	const [scanResult, setScanResult] = useState<IDetectedBarcode>(),
 		[scanningHold, setScanningHold] = useState<boolean>(false),
-		[scanningEnabled, setScanningEnabled] = useState<boolean>(true),
+		[scanningEnabled, setScanningEnabled] = useState<boolean>(false),
 		[scanningError, setScanningError] = useState<boolean>(false);
 
 	const location = useLocation();
@@ -64,24 +66,26 @@ const Scan: React.FC = () => {
 				</IonHeader>
 				<section>
 					<article>
-						<Scanner
-							paused={!scanningEnabled}
-							components={{
-								audio: false,
-								finder: false,
-								zoom: true,
-								torch: true,
-								tracker: outline
-							}}
-							formats={[
-								"qr_code",
-								"rm_qr_code",
-								"micro_qr_code",
-								"matrix_codes"
-							]}
-							onScan={(result) => handleScan(result)}
-							onError={(error) => handleError(error)}
-							children={(!scanningEnabled || scanningError) && <button onClick={() => setScanningHold(false)}>Start scanning</button>} />
+						<ErrorBoundary fallback={"Huh"}>
+							<Scanner
+								paused={!scanningEnabled}
+								components={{
+									audio: false,
+									finder: false,
+									zoom: true,
+									torch: true,
+									tracker: outline
+								}}
+								formats={[
+									"qr_code",
+									"rm_qr_code",
+									"micro_qr_code",
+									"matrix_codes"
+								]}
+								onScan={(result) => handleScan(result)}
+								onError={(error) => handleError(error)}
+								children={(!scanningEnabled || scanningError) && <button onClick={() => setScanningHold(false)}>Start scanning</button>} />
+						</ErrorBoundary>
 					</article>
 					<article>
 						{scanResult?.rawValue}
