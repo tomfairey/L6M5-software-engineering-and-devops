@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+    restart: unless-stopped
+  # application:
+  #   build:
+  #     context: ./frontend/
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "80:8081"
+  #   depends_on:
+  #     - database
+  #   environment: {}
+  #   volumes:
+  #     - ./application:/usr/src/app
+  #   restart: unless-stopped
+  frontend:
+    image: node:20.15
+    expose:
+      - "80"
+    ports:
+      - "5173:80"
+    environment: {}
+    volumes:
+      - nodemodules:/usr/src/app/node_modules
+      - ./frontend:/usr/src/app
+    working_dir: /usr/src/app
+    command: "./entrypoint-dev.sh"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:80/"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  nodemodules:
