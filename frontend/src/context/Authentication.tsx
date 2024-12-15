@@ -1,46 +1,30 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, type ReactNode } from "react";
 const AuthContext = createContext({
-    token: "",
-    user: null,
-    loginAction: (data) => { },
+    user: {},
+    isLoggedIn: false,
+    logIn: (/*data*/) => { },
     logOut: () => { },
 });
 
-const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem("site") || "");
-    const navigate = useNavigate();
-    const loginAction = async (data) => {
-        try {
-            const response = await fetch("your-api-endpoint/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            });
-            const res = await response.json();
-            if (res.data) {
-                setUser(res.data.user);
-                setToken(res.token);
-                localStorage.setItem("site", res.token);
-                navigate("/dashboard");
-                return;
-            }
-            throw new Error(res.message);
-        } catch (err) {
-            console.error(err);
-        }
-    };
+const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState({});
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const logIn = (/*data*/) => {
+        // TODO: Use credentials for token
+        // TODO: Store token
+        // TODO? Validate token
+        setUser({ first_name: "First", last_name: "Last" })
+        setIsLoggedIn(true);
+    }
 
     const logOut = () => {
-        setUser(null);
-        setToken("");
-        localStorage.removeItem("site");
-        navigate("/login");
+        // TODO: Wipe storage of token
+        setUser({});
+        setIsLoggedIn(false);
     };
 
-    return <AuthContext.Provider value={{ token, user, loginAction, logOut }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, isLoggedIn, logIn, logOut }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

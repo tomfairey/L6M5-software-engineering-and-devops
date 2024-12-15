@@ -49,6 +49,10 @@ import './theme/variables.css';
 
 setupIonicReact();
 
+import { useAuth } from "./context/Authentication"
+import { IonButton } from '@ionic/react';
+import Login from './pages/Login'
+
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
@@ -66,9 +70,7 @@ const App: React.FC = () => (
             <Settings />
           </Route>
           <Route path="/login">
-            <>
-              <h1>Login page: <i>Not yet routing configured</i></h1>
-            </>
+            <Login />
           </Route>
           <Route exact path="/">
             <Redirect to="/scan" />
