@@ -1,0 +1,68 @@
+name: Run unit tests and dry-run image build
+
+on:
+  push:
+    branches:
+      - "main"
+      - "development"
+    paths:
+      - "application/**"
+  pull_request:
+    branches:
+      - "main"
+      - "development"
+    paths:
+      - "application/**"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-application
+
+jobs:
+  test-application:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Execute tests
+        run: |
+          cd application
+          npm ci
+          npm run test
+
+  dryrun-package-application:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,value=${{ github.sha }}
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+      - name: Try building Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./application/
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
