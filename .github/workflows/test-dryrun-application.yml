@@ -29,11 +29,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Execute Unit tests
+      - name: Execute tests
         run: |
           cd application
           npm ci
-          npm run test.unit
+          npm run test
 
   dryrun-package-application:
     runs-on: ubuntu-latest

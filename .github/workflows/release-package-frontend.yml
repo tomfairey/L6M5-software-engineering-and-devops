@@ -32,7 +32,7 @@ jobs:
         run: |
           cd frontend
           npm ci
-          npm run test
+          npm run test.unit
 
   build-and-push-frontend-image:
     # This job should only run if the PR has been merged
