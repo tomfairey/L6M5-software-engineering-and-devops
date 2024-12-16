@@ -53,51 +53,51 @@ import { useAuth } from "./context/Authentication"
 import { IonButton } from '@ionic/react';
 import Login from './pages/Login'
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/history">
-            <Tab1 />
-          </Route>
-          <Route exact path="/scan">
-            {/* <Tab2 /> */}
-            <Scan />
-          </Route>
-          <Route path="/settings">
-            {/* <Tab3 /> */}
-            <Settings />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/scan" />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/scan" />
-          </Route>
-          <Route render={() => <Redirect to="/" />} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="history" href="/history">
-            <IonIcon aria-hidden="true" icon={triangle} md={listSharp} ios={listOutline} />
-            <IonLabel>History</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="scan" href="/scan">
-            <IonIcon aria-hidden="true" icon={/* ellipse */ barcodeSharp} />
-            <IonLabel>Scan</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="settings" href="/settings">
-            {/* <IonIcon aria-hidden="true" icon={square} /> */}
-            <IonIcon aria-hidden="true" icon={square} md={settingsSharp} ios={cogOutline} />
-            <IonLabel>Settings</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  const auth = useAuth();
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route exact path="/history">
+              <Tab1 />
+            </Route>
+            <Route exact path="/scan">
+              {/* <Tab2 /> */}
+              <Scan />
+            </Route>
+            <Route path="/settings">
+              {/* <Tab3 /> */}
+              <Settings />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/">
+              <Route render={() => auth.isLoggedIn ? <Redirect to="/scan" /> : <Redirect to="/login" />} />
+            </Route>
+            <Route render={() => <Redirect to="/" />} />
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="history" href="/history">
+              <IonIcon aria-hidden="true" icon={triangle} md={listSharp} ios={listOutline} />
+              <IonLabel>History</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="scan" href="/scan">
+              <IonIcon aria-hidden="true" icon={/* ellipse */ barcodeSharp} />
+              <IonLabel>Scan</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="settings" href="/settings">
+              {/* <IonIcon aria-hidden="true" icon={square} /> */}
+              <IonIcon aria-hidden="true" icon={square} md={settingsSharp} ios={cogOutline} />
+              <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>)
+};
 
 export default App;
