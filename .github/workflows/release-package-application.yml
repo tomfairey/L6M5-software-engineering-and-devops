@@ -1,27 +1,45 @@
-name: Create and publish a Docker image
+name: Create and publish application Docker image
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-      - development
-    tags:
-      - v*
-    paths:
-      - "application/**"
   pull_request:
     branches:
       - "main"
+      - "development"
     paths:
       - "application/**"
+    types:
+      - closed
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-application
 
 jobs:
-  build-and-push-image:
+  test-application:
+    # This job should only run if the PR has been merged
+    if: github.event.pull_request.merged == true
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Execute Unit tests
+        run: |
+          cd application
+          npm ci
+          npm run test
+
+  build-and-push-application-image:
+    # This job should only run if the PR has been merged
+    if: github.event.pull_request.merged == true
+
+    needs: [test-application]
+
     runs-on: ubuntu-latest
 
     permissions:
