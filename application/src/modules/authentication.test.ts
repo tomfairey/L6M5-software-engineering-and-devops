@@ -6,6 +6,10 @@ import {UserKey} from '@/types/user';
 import crypto from 'crypto';
 
 describe('Test password hashing and verification', async () => {
+	// Set the secret pepper to a known value for testing
+	process.env.SECRET_B64 = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
+
+	// Generate a password for testing
 	const password = ['Password', 'vitest', Date.now()].join('-');
 
 	test('Can hash a fresh password', async () => {
