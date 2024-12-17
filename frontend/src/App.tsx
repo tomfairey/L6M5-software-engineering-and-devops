@@ -7,15 +7,18 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  setupIonicReact
+  setupIonicReact,
+  IonButton
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle, cogOutline, settingsSharp, barcodeSharp, listOutline, listSharp } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
-import Scan from './pages/Scan';
-import Settings from './pages/Settings';
+
+import History from '@pages/History';
+import Scan from '@pages/Scan';
+import Settings from '@pages/Settings';
+import Login from '@pages/Login'
+
+import { useAuth } from "@context/Authentication"
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -49,10 +52,6 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-import { useAuth } from "./context/Authentication"
-import { IonButton } from '@ionic/react';
-import Login from './pages/Login'
-
 const App: React.FC = () => {
   const auth = useAuth();
 
@@ -62,14 +61,12 @@ const App: React.FC = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/history">
-              <Tab1 />
+              <History />
             </Route>
             <Route exact path="/scan">
-              {/* <Tab2 /> */}
               <Scan />
             </Route>
             <Route path="/settings">
-              {/* <Tab3 /> */}
               <Settings />
             </Route>
             <Route path="/login">
