@@ -18,6 +18,7 @@ spec:
       containers:
         - name: database
           image: ghcr.io/tomfairey/l6m5-software-engineering-and-devops-database:latest
+          imagePullPolicy: Always
           env:
             - name: POSTGRES_DB
               valueFrom:
@@ -66,6 +67,7 @@ spec:
       containers:
         - image: ghcr.io/tomfairey/l6m5-software-engineering-and-devops-application:latest
           name: application
+          imagePullPolicy: Always
           env:
             - name: DATABASE_HOST
               value: postgres
@@ -121,6 +123,7 @@ spec:
       containers:
         - image: ghcr.io/tomfairey/l6m5-software-engineering-and-devops-frontend:latest
           name: frontend
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "512Mi"
