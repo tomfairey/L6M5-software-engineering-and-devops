@@ -45,7 +45,7 @@ const handleError = (e: AxiosError | any) => {
 };
 
 export const instance = axios.create({
-	baseURL: import.meta.env.DEV ? "/api/" : "https://api.example.com",
+	baseURL: "/api/",
 });
 
 instance.interceptors.request.use((config) => {
