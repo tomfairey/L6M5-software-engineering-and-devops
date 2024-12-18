@@ -1,0 +1,52 @@
+name: Dry-run database image build
+
+on:
+  push:
+    branches:
+      - "main"
+      - "development"
+    paths:
+      - "database/**"
+  pull_request:
+    branches:
+      - "main"
+      - "development"
+    paths:
+      - "database/**"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-database
+
+jobs:
+  dryrun-package-database:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,value=${{ github.sha }}
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+
+      - name: Try building Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./database/
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
