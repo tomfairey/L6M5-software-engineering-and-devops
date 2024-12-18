@@ -19,6 +19,9 @@ RUN npm run build
 # Step 2: Build the final image using artefacts from above
 FROM nginx:1.27-alpine-slim
 
+# Copy in the nginx configuration file
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
 # Create app directory
 WORKDIR /usr/share/nginx/html
 
