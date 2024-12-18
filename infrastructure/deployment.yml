@@ -84,7 +84,7 @@ spec:
                 secretKeyRef:
                   name: database-secrets
                   key: password
-            - name: SECRET
+            - name: SECRET_B64
               valueFrom:
                 secretKeyRef:
                   name: application-secrets
