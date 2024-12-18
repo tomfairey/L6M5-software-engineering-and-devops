@@ -7,8 +7,14 @@ import { type IDetectedBarcode, outline, Scanner } from '@yudiel/react-qr-scanne
 import { ErrorBoundary } from "react-error-boundary";
 
 import { pause, play } from 'ionicons/icons';
+import { createScanlog } from '@modules/api';
+import { useToast } from '@context/Toasts';
+import PleaseLogin from './PleaseLogin';
+import { useAuth } from '@context/Authentication';
 
 const Scan: React.FC = () => {
+	const auth = useAuth();
+	const toast = useToast();
 
 	const [scanResult, setScanResult] = useState<IDetectedBarcode>(),
 		[scanningHold, setScanningHold] = useState<boolean>(false),
@@ -22,8 +28,17 @@ const Scan: React.FC = () => {
 
 		if (code) {
 			// Do something
+			toast.present("Scanned: " + code.rawValue.substring(0, 32) + "...");
 			setScanResult(code);
 			console.log(code);
+			createScanlog({
+				scan_value: code.rawValue,
+				format: code.format,
+				valid: false,
+				scan_time: new Date(),
+				message: "Scanned, validation not currently implemented"
+			})
+
 		}
 	}
 
@@ -45,6 +60,9 @@ const Scan: React.FC = () => {
 	useEffect(() => {
 		enableScanning(!scanningHold);
 	}, [scanningHold])
+
+	if (!auth?.isLoggedIn)
+		return <PleaseLogin page="Scan" />
 
 	return (
 		<IonPage>

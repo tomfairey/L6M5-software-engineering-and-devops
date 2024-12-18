@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: database
+  name: database
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: database
+  template:
+    metadata:
+      labels:
+        run: database
+    spec:
+      containers:
+        - name: database
+          image: ghcr.io/tomfairey/l6m5-software-engineering-and-devops-database:latest
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: database
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: password
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "500m"
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 5432
+              name: postgres
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: application
+  name: application
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      run: application
+  template:
+    metadata:
+      labels:
+        run: application
+    spec:
+      containers:
+        - image: ghcr.io/tomfairey/l6m5-software-engineering-and-devops-application:latest
+          name: application
+          env:
+            - name: DATABASE_HOST
+              value: postgres
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: database
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: password
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: SECRET_B64
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 80
+              name: web
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: frontend
+  name: frontend
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: frontend
+  template:
+    metadata:
+      labels:
+        run: frontend
+    spec:
+      containers:
+        - image: ghcr.io/tomfairey/l6m5-software-engineering-and-devops-frontend:latest
+          name: frontend
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 80
+              name: web
+              protocol: TCP

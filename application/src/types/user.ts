@@ -5,6 +5,7 @@ export enum UserKey {
 	LAST_NAME = 'last_name',
 	PASSWORD_HASH = 'password_hash',
 	SECRET_B64 = 'secret_b64',
+	IS_ADMIN = 'is_admin',
 }
 
 export type User = BaseUser | SecurityUser | FullUser;
@@ -16,6 +17,7 @@ export interface BaseUser {
 export interface SecurityUser extends BaseUser {
 	[UserKey.PASSWORD_HASH]: string;
 	[UserKey.SECRET_B64]: string | null;
+	[UserKey.IS_ADMIN]: boolean;
 }
 
 export interface FullUser extends SecurityUser {
