@@ -102,12 +102,12 @@ export const enforceAdminMiddleware = async (
 	res: Response,
 	next: NextFunction,
 ) => {
-	if (!req.user && !req.user?.[UserKey.IS_ADMIN]) {
-		res.status(403).send('Unauthorised');
+	if (req.user && req.user?.[UserKey.IS_ADMIN]) {
+		next();
 		return;
 	}
 
-	next();
+	res.status(403).send('Unauthorised');
 };
 
 export const enforceSelfOrAdminMiddleware = async (
