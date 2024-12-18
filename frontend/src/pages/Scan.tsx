@@ -9,8 +9,11 @@ import { ErrorBoundary } from "react-error-boundary";
 import { pause, play } from 'ionicons/icons';
 import { createScanlog } from '@modules/api';
 import { useToast } from '@context/Toasts';
+import PleaseLogin from './PleaseLogin';
+import { useAuth } from '@context/Authentication';
 
 const Scan: React.FC = () => {
+	const auth = useAuth();
 	const toast = useToast();
 
 	const [scanResult, setScanResult] = useState<IDetectedBarcode>(),
@@ -57,6 +60,9 @@ const Scan: React.FC = () => {
 	useEffect(() => {
 		enableScanning(!scanningHold);
 	}, [scanningHold])
+
+	if (!auth?.isLoggedIn)
+		return <PleaseLogin page="Scan" />
 
 	return (
 		<IonPage>

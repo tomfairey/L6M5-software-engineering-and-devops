@@ -7,11 +7,10 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  setupIonicReact,
-  IonButton
+  setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle, cogOutline, settingsSharp, barcodeSharp, listOutline, listSharp } from 'ionicons/icons';
+import { cogOutline, settingsSharp, barcodeSharp, listOutline, listSharp } from 'ionicons/icons';
 
 import History from '@pages/History';
 import Scan from '@pages/Scan';
@@ -49,7 +48,6 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import PleaseLogin from './pages/PleaseLogin';
 
 setupIonicReact();
 
@@ -61,31 +59,34 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/history" render={() => auth.isLoggedIn ? <History /> : <PleaseLogin page="History" />} />
-            <Route exact path="/scan" render={() => auth.isLoggedIn ? <Scan /> : <PleaseLogin page="Scan" />} />
+            <Route exact path="/history">
+              <History />
+            </Route>
+            <Route exact path="/scan">
+              <Scan />
+            </Route>
             <Route exact path="/settings">
               <Settings />
             </Route>
             <Route path="/login">
               <Login />
             </Route>
-            {/* <Route exact path="/">
+            <Route exact path="/">
               <Route render={() => auth.isLoggedIn ? <Redirect to="/scan" /> : <Redirect to="/login" />} />
-            </Route> */}
-            <Route render={() => auth.isLoggedIn ? <Redirect to="/scan" /> : <Redirect to="/login" />} />
+            </Route>
+            <Route render={() => <Redirect to="/" />} />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="history" href="/history">
-              <IonIcon aria-hidden="true" icon={triangle} md={listSharp} ios={listOutline} />
+              <IonIcon aria-hidden="true" md={listSharp} ios={listOutline} />
               <IonLabel>History</IonLabel>
             </IonTabButton>
             <IonTabButton tab="scan" href="/scan">
-              <IonIcon aria-hidden="true" icon={/* ellipse */ barcodeSharp} />
+              <IonIcon aria-hidden="true" icon={barcodeSharp} />
               <IonLabel>Scan</IonLabel>
             </IonTabButton>
             <IonTabButton tab="settings" href="/settings">
-              {/* <IonIcon aria-hidden="true" icon={square} /> */}
-              <IonIcon aria-hidden="true" icon={square} md={settingsSharp} ios={cogOutline} />
+              <IonIcon aria-hidden="true" md={settingsSharp} ios={cogOutline} />
               <IonLabel>Settings</IonLabel>
             </IonTabButton>
           </IonTabBar>

@@ -22,6 +22,7 @@ import { useAuth } from '@context/Authentication';
 import { useEffect, useState } from 'react';
 import { IonInfiniteScrollCustomEvent, IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core';
 import { ScanLog } from '@/types/scanlog';
+import PleaseLogin from './PleaseLogin';
 
 const History: React.FC = () => {
 	const auth = useAuth();
@@ -46,6 +47,8 @@ const History: React.FC = () => {
 	}
 
 	const fetchScanlogsFromIndex = async (index: number) => {
+		if (!auth?.isLoggedIn) return;
+
 		const newScanlogs = await getAllScanlogs(filterByUser, itemLimit, index);
 
 		handleAddingScanlogs(newScanlogs)
@@ -97,6 +100,9 @@ const History: React.FC = () => {
 			setScanlogs([]);
 		fetchScanlogsFromIndex(0);
 	}, [filterByUser]);
+
+	if (!auth?.isLoggedIn)
+		return <PleaseLogin page="History" />
 
 	return (
 		<IonPage>
