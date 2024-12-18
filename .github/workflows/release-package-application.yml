@@ -1,6 +1,7 @@
 name: Create and publish application Docker image
 
 on:
+  workflow_dispatch: {}
   pull_request:
     branches:
       - "main"

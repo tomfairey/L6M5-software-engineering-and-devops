@@ -1,6 +1,7 @@
 name: Dry-run database image build
 
 on:
+  workflow_dispatch: {}
   push:
     branches:
       - "main"

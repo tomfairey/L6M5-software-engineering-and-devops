@@ -1,6 +1,7 @@
 name: Run unit tests and dry-run image build
 
 on:
+  workflow_dispatch: {}
   push:
     branches:
       - "main"
