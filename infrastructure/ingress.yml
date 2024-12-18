@@ -31,3 +31,16 @@ spec:
         - kind: Service
           name: application
           port: 80
+      middlewares:
+        - name: l6m5-softeng-devops-stripprefix
+          namespace: l6m5-software-engineering-and-devops
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: l6m5-softeng-devops-stripprefix
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
