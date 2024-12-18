@@ -29,15 +29,11 @@ jobs:
           k8s-url: ${{ secrets.KUBERNETES_CONTROLPLANE }}
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
 
+      - uses: azure/setup-kubectl@v4
+
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Deploy to the Kubernetes cluster
-        uses: azure/k8s-deploy@v1
-        with:
-          namespace: l6m5-software-engineering-and-devops
-          manifests: |
-            ./infrastructure/deployment.yaml
-            ./infrastructure/ingress.yaml
-            ./infrastructure/namespace.yaml
-            ./infrastructure/service.yaml
+      - name: Deploy manifests
+        run: |
+          kubectl apply -f ./infrastructure/
