@@ -7,10 +7,12 @@ import { User } from "@/types/user";
 import ExistingUserManagementCard from "./ExistingUserManagementCard";
 import NewUserManagementCard from "./NewUserManagementCard";
 
-export default function UserManagementCard() {
+export default function UserManagementCard(props: { presentingElement: HTMLElement | null }) {
+    const { presentingElement } = props;
+
     return (
         <>
-            <ExistingUserManagementCard />
+            <ExistingUserManagementCard presentingElement={presentingElement} />
             <NewUserManagementCard />
         </>
     )

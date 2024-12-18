@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -19,6 +20,13 @@ const Settings: React.FC = () => {
   const auth = useAuth();
   const toast = useToast();
 
+  const pageRef = useRef(null);
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setPresentingElement(pageRef.current);
+  }, []);
+
   const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {
     try {
       auth.refreshSelf();
@@ -31,7 +39,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage ref={pageRef}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Settings</IonTitle>
@@ -49,7 +57,7 @@ const Settings: React.FC = () => {
 
         <AuthenticationCard />
 
-        {auth.isLoggedIn && auth.user?.is_admin && <UserManagementCard />}
+        {auth.isLoggedIn && auth.user?.is_admin && <UserManagementCard presentingElement={presentingElement} />}
 
       </IonContent>
     </IonPage>

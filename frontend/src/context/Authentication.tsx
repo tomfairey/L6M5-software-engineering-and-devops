@@ -4,12 +4,12 @@ import type { User, EmptyUser } from "@/types/user";
 import { clearCredentials, getSelf, login } from "@modules/api";
 import { useToast } from "./Toasts";
 
-const AuthContext = createContext<{ credentials: { email?: string, password?: string }, user: User | EmptyUser, isLoggedIn: boolean, logIn: (email: string, password: string) => void, refreshSelf: () => void, logOut: () => void }>({
+const AuthContext = createContext<{ credentials: { email?: string, password?: string }, user: User | EmptyUser, isLoggedIn: boolean, logIn: (email: string, password: string) => Promise<void>, refreshSelf: () => Promise<void>, logOut: () => void }>({
     credentials: {},
     user: {},
     isLoggedIn: false,
-    logIn: (/*data*/) => { },
-    refreshSelf: () => { },
+    logIn: async () => { },
+    refreshSelf: async () => { },
     logOut: () => { },
 });
 
@@ -27,15 +27,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logIn = async (username: string, password: string) => {
         try {
             // TODO: Use credentials for token
-            const { email, first_name, last_name, is_admin } = await login(username, password);
+            const { uuid, email, first_name, last_name, is_admin } = await login(username, password);
             // TODO: Store token
             setCredentials({ email, password });
             // TODO? Validate token
-            setUser({ email, first_name, last_name, is_admin })
+            setUser({ uuid, email, first_name, last_name, is_admin })
             setIsLoggedIn(true);
-            history.go(-1);
         } catch (e) {
             logOut();
+            throw e;
         }
     }
 

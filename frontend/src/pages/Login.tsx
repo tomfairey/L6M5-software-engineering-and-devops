@@ -18,14 +18,18 @@ import {
   IonList,
   IonItem,
   IonInput,
-  IonInputPasswordToggle
+  IonInputPasswordToggle,
+  useIonRouter
 } from '@ionic/react';
 import './Settings.scss';
 
-import { useAuth } from '../context/Authentication';
+import { useAuth } from '@context/Authentication';
+import { useToast } from '@context/Toasts';
 
 const Settings: React.FC = () => {
   const auth = useAuth();
+  const router = useIonRouter();
+  const toast = useToast();
 
   const [username, setUsername] = useState<string>('admin@localhost.local'),
     [password, setPassword] = useState<string>('Password1!');
@@ -34,6 +38,15 @@ const Settings: React.FC = () => {
     const value = (ev.target as HTMLIonInputElement).value as string;
 
     setState(value);
+  };
+
+  const login = () => {
+    auth.logIn(username, password).then(() => {
+      router.push("/", "root", "replace");
+    }).catch((e: Error | any) => {
+      toast.present(e?.message);
+      console.error(e);
+    });
   };
 
   return (
@@ -59,7 +72,9 @@ const Settings: React.FC = () => {
             </IonInput>
           </IonItem>
         </IonList>
-        <IonButton onClick={() => auth.logIn(username, password)}>Log "in"...</IonButton>
+        <IonCard>
+          <IonButton expand="block" onClick={() => login()}>Log "in"...</IonButton>
+        </IonCard>
       </IonContent>
     </IonPage>
   );

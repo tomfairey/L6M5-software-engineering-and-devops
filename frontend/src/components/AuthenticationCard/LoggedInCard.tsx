@@ -1,8 +1,27 @@
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonGrid, IonCol, IonRow, IonAvatar, IonButton } from "@ionic/react"
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonGrid, IonCol, IonRow, IonAvatar, IonButton, useIonAlert } from "@ionic/react"
 import { useAuth } from "@context/Authentication"
 
 export default function LoggedInCard() {
     const auth = useAuth();
+    const [presentAlert] = useIonAlert();
+
+    const logout = () => {
+        presentAlert({
+            header: 'Log-out',
+            subHeader: 'Are you sure you want to log-out?',
+            buttons: [{
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => { }
+            }, {
+                text: 'Logout',
+                role: 'destructive',
+                handler: () => {
+                    auth.logOut()
+                }
+            }],
+        });
+    }
 
     return (
         <IonCard>
@@ -19,7 +38,7 @@ export default function LoggedInCard() {
                             <IonCardSubtitle>Configure your settings below...</IonCardSubtitle>
                         </IonCol>
                         <IonCol size="auto">
-                            <IonButton onClick={() => auth.logOut()}>Logout</IonButton>
+                            <IonButton onClick={() => logout()}>Logout</IonButton>
                         </IonCol>
                     </IonRow>
                 </IonGrid>

@@ -20,21 +20,21 @@ CREATE TABLE IF NOT EXISTS scanlog (
     scan_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     message TEXT,
     format VARCHAR(16),
-    user_uuid UUID REFERENCES users(uuid)
+    user_uuid UUID REFERENCES users(uuid) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS companies (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name TEXT NOT NULL,
-    code VARCHAR(16) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS companies (
+--     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--     name TEXT NOT NULL,
+--     code VARCHAR(16) NOT NULL
+-- );
 
-CREATE TABLE IF NOT EXISTS products (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name TEXT NOT NULL,
-    company INT NOT NULL REFERENCES companies(id),
-    code VARCHAR(16) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS products (
+--     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--     name TEXT NOT NULL,
+--     company INT NOT NULL REFERENCES companies(id),
+--     code VARCHAR(16) NOT NULL
+-- );
 
 INSERT INTO users
 	(email, first_name, last_name, password_hash, secret_b64, is_admin)

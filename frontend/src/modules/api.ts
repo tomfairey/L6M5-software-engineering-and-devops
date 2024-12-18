@@ -1,3 +1,4 @@
+import { ScanLog } from "@/types/scanlog";
 import { User } from "@/types/user";
 import axios, { AxiosBasicCredentials, AxiosError } from "axios";
 
@@ -163,6 +164,49 @@ export const deleteUser = async (uuid: string): Promise<void> => {
 		.delete(`/v1/authentication/user/${uuid}`)
 		.then((res) => {
 			return;
+		})
+		.catch((e) => {
+			handleError(e);
+			throw new Error(e?.response?.data?.message);
+		});
+};
+
+export const getAllScanlogs = async (
+	allUsers: boolean = false,
+	limit?: number,
+	offset?: number
+): Promise<ScanLog[]> => {
+	if (!canUseCredentials()) throw new Error("No credentials available");
+
+	return instance
+		.get("/v1/scanlog", {
+			params: {
+				...(allUsers ? { allUsers } : {}),
+				...(limit ? { limit } : {}),
+				...(offset ? { offset } : {}),
+			},
+		})
+		.then((res): ScanLog[] => {
+			return res.data.map((scanlog: ScanLog) => ({
+				...scanlog,
+				scan_time: new Date(scanlog.scan_time),
+			}));
+		})
+		.catch((e) => {
+			handleError(e);
+			throw new Error(e?.response?.data?.message);
+		});
+};
+
+export const createScanlog = async (
+	scanlog: Omit<ScanLog, "id">
+): Promise<ScanLog> => {
+	if (!canUseCredentials()) throw new Error("No credentials available");
+
+	return instance
+		.post("/v1/scanlog", scanlog)
+		.then((res) => {
+			return res.data.map;
 		})
 		.catch((e) => {
 			handleError(e);

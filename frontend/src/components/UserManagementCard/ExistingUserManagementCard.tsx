@@ -5,7 +5,9 @@ import { deleteUser, editUser, getUsers, validateEmail, validatePasswordStrength
 import { User } from "@/types/user";
 import { shieldHalfOutline } from "ionicons/icons";
 
-export default function UserManagementCard() {
+export default function UserManagementCard(props: { presentingElement: HTMLElement | null }) {
+    const { presentingElement } = props;
+
     const [users, setUsers] = useState<User[]>([]);
 
     const [presentAlert] = useIonAlert();
@@ -17,8 +19,6 @@ export default function UserManagementCard() {
     useEffect(() => {
         updateUsers();
     }, []);
-
-    //////////////////////////
 
     const [isOpen, setIsOpen] = useState(false),
         [isLoading, setIsLoading] = useState(false);
@@ -32,12 +32,6 @@ export default function UserManagementCard() {
         [password, setPassword] = useState<string>(''),
         [confirmPassword, setConfirmPassword] = useState<string>(''),
         [isAdmin, setIsAdmin] = useState<boolean>(false);
-
-    // function onWillDismiss(ev: CustomEvent<OverlayEventDetail>) {
-    //     if (ev.detail.role === 'confirm') {
-    //         setMessage(`Hello, ${ev.detail.data}!`);
-    //     }
-    // }
 
     const deleteAlert = (user: User) => {
         presentAlert({
@@ -173,16 +167,16 @@ export default function UserManagementCard() {
                             </IonGrid>
                         </IonItem>
                     ))}
-                    <IonModal isOpen={isOpen} onWillDismiss={() => setIsOpen(false)}>
+                    <IonModal isOpen={isOpen} onWillDismiss={() => setIsOpen(false)} presentingElement={presentingElement!}>
                         <IonHeader>
                             <IonToolbar>
                                 <IonButtons slot="start">
                                     <IonButton onClick={() => setIsOpen(false)}>Cancel</IonButton>
                                 </IonButtons>
-                                <IonTitle>Welcome</IonTitle>
+                                <IonTitle className="ion-justify-content-center">Edit user</IonTitle>
                                 <IonButtons slot="end">
                                     <IonButton strong={true} disabled={!validate()} onClick={() => submit()}>
-                                        Confirm
+                                        Update
                                     </IonButton>
                                 </IonButtons>
                                 {isLoading && <IonProgressBar type="indeterminate"></IonProgressBar>}
@@ -209,7 +203,6 @@ export default function UserManagementCard() {
                             <IonItem>
                                 <IonCheckbox checked={isAdmin != originalUser?.is_admin ? isAdmin : originalUser?.is_admin} onIonChange={(e) => onCheckboxInput(e, setIsAdmin)}>Admin user</IonCheckbox>
                             </IonItem>
-                            <IonButton expand="block" onClick={() => submit()} disabled={!validate()}>Update</IonButton>
                         </IonContent>
                     </IonModal>
                 </IonList>

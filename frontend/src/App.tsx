@@ -49,6 +49,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import PleaseLogin from './pages/PleaseLogin';
 
 setupIonicReact();
 
@@ -60,22 +61,18 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/history">
-              <History />
-            </Route>
-            <Route exact path="/scan">
-              <Scan />
-            </Route>
-            <Route path="/settings">
+            <Route exact path="/history" render={() => auth.isLoggedIn ? <History /> : <PleaseLogin page="History" />} />
+            <Route exact path="/scan" render={() => auth.isLoggedIn ? <Scan /> : <PleaseLogin page="Scan" />} />
+            <Route exact path="/settings">
               <Settings />
             </Route>
             <Route path="/login">
               <Login />
             </Route>
-            <Route exact path="/">
+            {/* <Route exact path="/">
               <Route render={() => auth.isLoggedIn ? <Redirect to="/scan" /> : <Redirect to="/login" />} />
-            </Route>
-            <Route render={() => <Redirect to="/" />} />
+            </Route> */}
+            <Route render={() => auth.isLoggedIn ? <Redirect to="/scan" /> : <Redirect to="/login" />} />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="history" href="/history">
