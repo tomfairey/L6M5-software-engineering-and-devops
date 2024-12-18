@@ -21,3 +21,15 @@ L6M5-software-engineering-and-devops
      ├─── namespace
      ├─── service
      └─── volume
+
+## Workflow Setup
+
+To deploy with workflows you'll need a service account, cluster role, and cluster role binding
+
+> kubectl apply -f extra\clusterrole.yaml
+
+> kubectl get secret github-actions-token -o yaml -n l6m5-software-engineering-and-devops
+
+> Place the secret in GitHub Actions as KUBERNETES_SECRET
+
+> Don't forget the server URL as KUBERNETES_CONTROLPLANE either

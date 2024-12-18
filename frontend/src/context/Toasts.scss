@@ -1,0 +1,6 @@
+ion-toast.md {
+	--ion-safe-area-bottom: calc(env(safe-area-inset-bottom) + 58px);
+}
+ion-toast.ios {
+	--ion-safe-area-bottom: calc(env(safe-area-inset-bottom) + 64px);
+}

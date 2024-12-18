@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+      name: postgres
+  selector:
+    run: database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: application
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      name: web
+  selector:
+    run: application
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+      name: web
+  selector:
+    run: frontend

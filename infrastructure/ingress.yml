@@ -1,0 +1,33 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: l6m5-softeng-devops-frontend-ingress
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`l6m5-softeng-devops.thomasfairey.co.uk`)
+      services:
+        - kind: Service
+          name: frontend
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: l6m5-softeng-devops-application-ingress
+  namespace: l6m5-software-engineering-and-devops
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`l6m5-softeng-devops.thomasfairey.co.uk`) && PathPrefix(`/api`)
+      services:
+        - kind: Service
+          name: application
+          port: 80
