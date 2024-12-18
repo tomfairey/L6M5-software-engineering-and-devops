@@ -13,6 +13,8 @@ rules:
       - ""
       - apps
       - networking.k8s.io
+      - traefik.io
+      - traefik.containo.us
     resources:
       - namespaces
       - deployments
@@ -20,6 +22,7 @@ rules:
       - ingresses
       - services
       - secrets
+      - ingressroutes
     verbs:
       - create
       - delete
