@@ -7,9 +7,8 @@ import {
 import database from '@modules/database';
 import argon2 from 'argon2';
 import {type PoolClient} from 'pg';
-import crypto, {hash} from 'crypto';
+import crypto from 'crypto';
 import {NextFunction, Request, Response} from 'express';
-import {get} from 'http';
 
 declare global {
 	namespace Express {
@@ -103,12 +102,12 @@ export const enforceAdminMiddleware = async (
 	res: Response,
 	next: NextFunction,
 ) => {
-	if (!req.user && !req.user?.[UserKey.IS_ADMIN]) {
-		res.status(403).send('Unauthorised');
+	if (req.user && req.user?.[UserKey.IS_ADMIN]) {
+		next();
 		return;
 	}
 
-	next();
+	res.status(403).send('Unauthorised');
 };
 
 export const enforceSelfOrAdminMiddleware = async (
