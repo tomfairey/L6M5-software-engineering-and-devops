@@ -36,8 +36,4 @@ jobs:
 
       - name: Deploy manifests
         run: |
-          kubectl delete -f ./infrastructure/service.yml
-          kubectl delete -f ./infrastructure/ingress.yml
-          kubectl delete -f ./infrastructure/deployment.yml
-
           kubectl apply -f ./infrastructure/
