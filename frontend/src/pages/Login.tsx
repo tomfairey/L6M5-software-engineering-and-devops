@@ -31,8 +31,8 @@ const Settings: React.FC = () => {
   const router = useIonRouter();
   const toast = useToast();
 
-  const [username, setUsername] = useState<string>('admin@localhost.local'),
-    [password, setPassword] = useState<string>('Password1!');
+  const [username, setUsername] = useState<string>(''),
+    [password, setPassword] = useState<string>('');
 
   const onInput = (ev: Event, setState: (arg0: string) => void) => {
     const value = (ev.target as HTMLIonInputElement).value as string;

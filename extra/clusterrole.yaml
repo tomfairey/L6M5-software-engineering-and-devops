@@ -23,6 +23,7 @@ rules:
       - services
       - secrets
       - ingressroutes
+      - middlewares
     verbs:
       - create
       - delete
