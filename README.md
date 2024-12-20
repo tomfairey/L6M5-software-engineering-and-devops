@@ -41,6 +41,7 @@ To deploy with workflows you'll need a service account, cluster role, and cluste
 > The version for each application is detailed in the .nvmrc file (currently v20.15 should be installed)
 
 3. Enter the "/application" directory and execute "npm install"
+> Whilst in this directory, the "example.env" file should be copied and re-named ".env" otherwise the backend will fail to launch
 
 4. Now, ideally in a seperate terminal session, enter the "/frontend" directory and execute "npm install"
 
