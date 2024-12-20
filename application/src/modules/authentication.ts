@@ -612,7 +612,3 @@ const verifyPassword = async (
 	if (!hash || !password) return false;
 	return argon2.verify(hash, password, pepper ? {secret: pepper} : undefined);
 };
-
-// (async () => {
-// 	console.log(await userPasswordHash('Password1!'));
-// })();

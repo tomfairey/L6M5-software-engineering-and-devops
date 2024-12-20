@@ -86,35 +86,3 @@ describe('Test password hashing and verification', async () => {
 		expect(userPasswordHash('Password1')).rejects.toThrowError();
 	});
 });
-
-// (async () => {
-// 	const password = 'Password1-Manual',
-// 		globalPeppercorn =
-// 			GLOBAL_PEPPERCORN ||
-// 			Buffer.from('mrMlyfW6TUKSMqifDaDS0Q==', 'base64'),
-// 		uniquePeppercorn = Buffer.from('mrMlyfW6TUKSMqifDaDS0Q==', 'base64'),
-// 		pepper = Buffer.from(
-// 			globalPeppercorn.map((b, i) => {
-// 				return b ^ uniquePeppercorn[i];
-// 			}).buffer,
-// 		), // Buffer.concat([globalPeppercorn, uniquePeppercorn])
-// 		hash = await argon2.hash(password, {secret: pepper}),
-// 		verify = await argon2.verify(hash, password, {secret: pepper});
-// 	console.log({password, pepper: pepper.toString('base64'), hash, verify});
-// })();
-
-// (async () => {
-// 	const password = 'Password1-Functions',
-// 		{[UserKey.PASSWORD_HASH]: hash, [UserKey.SECRET_B64]: pepper} =
-// 			await userPasswordHash(password),
-// 		verify = await userPasswordVerify(
-// 			{
-// 				uuid: '',
-// 				[UserKey.PASSWORD_HASH]: hash,
-// 				[UserKey.SECRET_B64]: pepper,
-// 			},
-// 			password,
-// 		);
-// 	console.log({password, pepper, hash, verify});
-// 	userPasswordVerify;
-// })();
