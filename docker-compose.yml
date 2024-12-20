@@ -2,7 +2,9 @@ version: "3.7"
 
 services:
   database:
-    image: postgres:17
+    build:
+      context: ./database/
+      dockerfile: Dockerfile
     ports:
       - "5432:5432"
     environment:
